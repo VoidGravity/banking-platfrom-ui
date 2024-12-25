@@ -1,0 +1,128 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Profile Header -->
+    <div class="relative" >
+      <div class="h-48 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"></div>
+      <div class="absolute -bottom-16 left-8 flex items-end gap-6">
+        <div class="relative">
+          <img
+            [src]="profile.avatar"
+            alt="Profile"
+            class="w-32 h-32 rounded-full border-4 border-white shadow-lg transform hover:scale-105 transition-transform duration-300"
+          />
+          <div class="absolute bottom-2 right-2 w-4 h-4 bg-emerald-400 rounded-full border-2 border-white"></div>
+        </div>
+        <div class="mb-4">
+          <div class="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+            Verified Account
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 px-8" >
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-slate-900">{{profile.name}}</h1>
+          <p class="text-slate-500">Account ID: {{profile.accountId}}</p>
+        </div>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-300 shadow-md">
+          Manage Account
+        </button>
+      </div>
+
+      <!-- Account Overview -->
+      <div class="grid grid-cols-3 gap-4 mt-8">
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+          <div class="text-sm text-slate-500 mb-1">Total Balance</div>
+          <div class="text-2xl font-bold text-slate-900">${{profile.balance}}</div>
+          <div class="text-emerald-500 text-sm mt-2 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+            </svg>
+            +2.5%
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+          <div class="text-sm text-slate-500 mb-1">Savings</div>
+          <div class="text-2xl font-bold text-slate-900">${{profile.savings}}</div>
+          <div class="text-blue-600 text-sm mt-2">4.5% APY</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+          <div class="text-sm text-slate-500 mb-1">Credit Score</div>
+          <div class="text-2xl font-bold text-slate-900">{{profile.creditScore}}</div>
+          <div class="text-emerald-500 text-sm mt-2">Excellent</div>
+        </div>
+      </div>
+
+      <!-- Account Details -->
+      <div class="mt-8 bg-white p-6 rounded-xl shadow-md" >
+        <h2 class="text-xl font-semibold mb-4 text-slate-900">Account Information</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-slate-500">Account Type</p>
+            <p class="text-slate-900">{{profile.accountType}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-slate-500">Branch</p>
+            <p class="text-slate-900">{{profile.branch}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-slate-500">Account Opening Date</p>
+            <p class="text-slate-900">{{profile.openingDate}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-slate-500">Status</p>
+            <p class="text-emerald-500 font-medium">{{profile.status}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="mt-8" >
+        <h2 class="text-xl font-semibold mb-4 text-slate-900">Recent Transactions</h2>
+        <div class="space-y-3">
+          <div
+            *ngFor="let transaction of profile.recentTransactions"
+            class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div [class]="transaction.type === 'credit' ? 'text-emerald-500' : 'text-red-500'">
+                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          [attr.d]="transaction.type === 'credit'
+                            ? 'M5 10l7-7m0 0l7 7m-7-7v18'
+                            : 'M19 14l-7 7m0 0l-7-7m7 7V3'"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-slate-900">{{transaction.description}}</p>
+                  <p class="text-sm text-slate-500">{{transaction.date}}</p>
+                </div>
+              </div>
+              <div [class]="'font-medium ' + (transaction.type === 'credit' ? 'text-emerald-500' : 'text-red-500')">
+                {{transaction.type === 'credit' ? '+' : '-'}}${{transaction.amount}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 grid grid-cols-4 gap-4" >
+        <button
+          *ngFor="let action of profile.quickActions"
+          class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 text-center"
+        >
+          <div class="text-blue-600 mb-2">
+            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="action.icon"/>
+            </svg>
+          </div>
+          <div class="text-sm font-medium text-slate-900">{{action.name}}</div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

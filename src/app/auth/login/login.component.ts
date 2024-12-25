@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
           } else if (response.role === 'EMPLOYEE') {
             this.router.navigate(['/dashboard/manage-transactions']);
           } else if (response.role === 'ADMIN') {
-            this.router.navigate(['/dashboard/users']);
+            this.router.navigate(['/admin/users']);
           }
         } else {
           console.error('Invalid response structure:', response);
