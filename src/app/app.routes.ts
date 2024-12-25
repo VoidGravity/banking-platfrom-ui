@@ -5,7 +5,12 @@ import {authGuard} from "./core/guards/auth.guard";
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent , canActivate: [authGuard] , data: { role: 'ADMIN' } },
-  {path : 'register' , component : RegisterComponent}
+  { path: 'login', component: LoginComponent  },
+  {path : 'register' , component : RegisterComponent},
+  {
+    path : 'admin' ,
+    loadChildren : () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate: [authGuard] , data: { role: 'ADMIN' }
+  }
 
 ];
