@@ -41,7 +41,7 @@ export class DisplayUsersComponent implements OnInit {
       status: 'inactive',
       lastLogin: '1 week ago'
     },
-    // Add more sample users here
+
   ];
 
   // Pagination
