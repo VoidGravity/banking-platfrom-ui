@@ -1,98 +1,148 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  status: 'active' | 'inactive';
-  lastLogin: string;
-}
+import { UserService } from '../../../core/services/user.service';
+import { User } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-display-users',
   templateUrl: './display-users.component.html',
 })
 export class DisplayUsersComponent implements OnInit {
-  users: User[] = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@example.com',
-      role: 'Admin',
-      status: 'active',
-      lastLogin: '2 hours ago'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      role: 'User',
-      status: 'active',
-      lastLogin: '1 day ago'
-    },
-    {
-      id: 3,
-      name: 'Bob Johnson',
-      email: 'bob@example.com',
-      role: 'Editor',
-      status: 'inactive',
-      lastLogin: '1 week ago'
-    },
+  users: User[] = [];
+  filteredUsers: User[] = [];
 
-  ];
 
-  // Pagination
+
   currentPage = 1;
-  entriesPerPage = 10;
+  entriesPerPage = 4;
   totalItems = 0;
   totalPages = 0;
   pages: number[] = [];
   startIndex = 0;
   endIndex = 0;
 
-  // Search
+
   searchTerm = '';
-  filteredUsers: User[] = [];
+
+  constructor(private userService: UserService) {}
+
+
 
   ngOnInit() {
-    this.initializeData();
+    this.fetchUsers();
   }
 
-  initializeData() {
-    this.filteredUsers = [...this.users];
-    this.totalItems = this.filteredUsers.length;
-    this.calculatePagination();
-    this.updateDisplayedUsers();
+
+
+  fetchUsers() {
+    this.userService.getAll().subscribe({
+      next: (response) => {
+        this.users = response;
+        this.filteredUsers = [...this.users];
+        this.totalItems = this.filteredUsers.length;
+        this.calculatePagination();
+        this.updateDisplayedUsers();
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
+
+
+
+
+
+  deleteUser(id?: number) {
+    if (!id) {
+      console.error("Invalid user ID:", id);
+      return;
+    }
+
+    this.userService.delete(id).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.users = this.users.filter(user => user.id !== id);
+        this.filteredUsers = this.filteredUsers.filter(user => user.id !== id);
+        this.totalItems = this.filteredUsers.length;
+        this.calculatePagination();
+        this.fetchUsers();
+      },
+      error: (error) => {
+        console.error("errrrorrrr" , error);
+      },
+    });
+  }
+
+
+
+
+
+
+  desactiveUser(id?: number) {
+    if (!id) {
+      console.error("Invalid user ID:", id);
+      return;
+    }
+
+    this.userService.desactiveUser(id).subscribe({
+      next:(response) =>{
+        console.log(response);
+        this.fetchUsers();
+      },
+      error:(error) =>{
+        console.error("errrrorrrr" , error);
+      }
+
+    })
+  }
+
+
+
+
 
   calculatePagination() {
-    this.totalPages = Math.ceil(this.totalItems / this.entriesPerPage);
-    this.pages = Array.from({length: this.totalPages}, (_, i) => i + 1);
+    this.totalPages = Math.ceil(this.filteredUsers.length / this.entriesPerPage);
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
     this.startIndex = (this.currentPage - 1) * this.entriesPerPage;
-    this.endIndex = Math.min(this.startIndex + this.entriesPerPage, this.totalItems);
+    this.endIndex = Math.min(this.startIndex + this.entriesPerPage, this.filteredUsers.length);
   }
 
+
+
+
+
+
   updateDisplayedUsers() {
-    const start = (this.currentPage - 1) * this.entriesPerPage;
-    const end = start + this.entriesPerPage;
+    this.startIndex = (this.currentPage - 1) * this.entriesPerPage;
+    this.endIndex = Math.min(this.startIndex + this.entriesPerPage, this.totalItems);
+
     this.filteredUsers = this.users
       .filter(user =>
-        user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        user.username.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         user.role.toLowerCase().includes(this.searchTerm.toLowerCase())
       )
-      .slice(start, end);
-    this.totalItems = this.filteredUsers.length;
-    this.calculatePagination();
+      .slice(this.startIndex, this.endIndex);
   }
 
+
+
+
+
+
   onSearch() {
+    this.filteredUsers = this.users.filter((user) =>
+      user.username.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      user.role.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
     this.currentPage = 1;
     this.updateDisplayedUsers();
   }
+
+
+
+
 
 
   previousPage() {
@@ -102,12 +152,20 @@ export class DisplayUsersComponent implements OnInit {
     }
   }
 
+
+
+
+
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.updateDisplayedUsers();
     }
   }
+
+
+
+
 
   goToPage(page: number) {
     this.currentPage = page;

@@ -6,7 +6,7 @@
     <div class="relative w-full mx-auto">
       <input
         type="text"
-        [(ngModel)]="user.name"
+        [(ngModel)]="user.username"
         name="name"
         required
         class="peer w-full border-b border-gray-300 py-2 transition-colors focus:border-green-500 focus:outline-none bg-transparent"
@@ -47,9 +47,9 @@
         class="peer w-full border-b border-gray-300 py-2 transition-colors focus:border-green-500 focus:outline-none bg-transparent appearance-none pr-8"
       >
         <option value="" class="text-gray-500" disabled selected>select</option>
-        <option value="admin">Administrator</option>
-        <option value="user">Regular User</option>
-        <option value="editor">Editor</option>
+        <option value="ADMIN">ADMIN</option>
+        <option value="USER">USER</option>
+        <option value="EMPLOYEE">EMPLOYEE</option>
       </select>
       <label
         class="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all
