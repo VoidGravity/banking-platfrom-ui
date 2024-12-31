@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('role', response.role);
           localStorage.setItem('username', response.username);
           if (response.role === 'USER') {
-           // this.router.navigate(['/dashboard/account-for-user']);
+            this.router.navigate(['/dashboard/account-for-user']);
             console.log('User logged in');
           } else if (response.role === 'EMPLOYEE') {
             this.router.navigate(['/dashboard/manage-transactions']);
