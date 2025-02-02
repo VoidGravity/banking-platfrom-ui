@@ -7,12 +7,12 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 @NgModule({
-  declarations: [],
+  declarations: [ProfileComponent,],
   imports: [
 
     CommonModule,
     UserRoutingModule,
-    ProfileComponent
+
   ]
 })
 export class UserModule { }

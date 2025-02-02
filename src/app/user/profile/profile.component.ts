@@ -4,8 +4,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-profile',
-  standalone: true,
-  imports: [CommonModule],
+
   animations: [
     trigger('fadeIn', [
       transition(':enter', [

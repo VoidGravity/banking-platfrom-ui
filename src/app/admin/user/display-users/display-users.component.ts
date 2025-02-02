@@ -45,6 +45,7 @@ export class DisplayUsersComponent implements OnInit {
       error: (error) => {
         console.error(error);
       },
+
     });
   }
 

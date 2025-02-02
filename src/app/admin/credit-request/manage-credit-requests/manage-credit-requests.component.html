@@ -1,0 +1,75 @@
+<div class="container mx-auto p-6 bg-white shadow-md rounded-lg">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold text-gray-800">Manage Credit Requests</h1>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-200 divide-y divide-gray-200">
+      <thead class="bg-gray-50 text-left">
+      <tr>
+        <th class="px-4 py-2  text-xs font-medium text-gray-600">ID</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600">Amount</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600">Interest Rate</th>
+        <th class="px-4 py-2  text-xs font-medium text-gray-600">Status</th>
+        <th class="px-4 py-2  text-xs font-medium text-gray-600">Actions</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let request of displayedRequests">
+        <td class="px-4  text-sm text-gray-800">{{ request.id }}</td>
+        <td class="px-4  text-sm text-gray-800">${{ request.amount | number }}</td>
+        <td class="px-4  text-sm text-gray-800">{{ request.interestRate | number: '1.2-2' }}%</td>
+        <td class=" text-sm">
+            <span
+              class="px-3 py-1 text-xs font-semibold rounded-full"
+              [ngClass]="statusClass(request.status)"
+            >
+              {{ request.status }}
+            </span>
+        </td>
+        <td class=" py-2 text-sm">
+          <button
+            (click)="updateStatus(request.id!, 'APPROVED')"
+            [disabled]="request.status === 'APPROVED'"
+            [ngClass]="request.status === 'APPROVED' ? 'text-gray-400 cursor-not-allowed' : 'text-green-600 hover:text-green-900'"
+            class="px-3 py-1"
+          >
+            Approve
+          </button>
+          <button
+            (click)="updateStatus(request.id!, 'REJECTED')"
+            [disabled]="request.status === 'REJECTED'"
+            [ngClass]="request.status === 'REJECTED' ? 'text-gray-400 cursor-not-allowed' : 'text-red-600 hover:text-red-800'"
+            class="px-3 py-1"
+          >
+            Reject
+          </button>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-between items-center mt-4">
+    <p class="text-sm text-gray-700">
+      Showing {{ startIndex }} to {{ endIndex }} of {{ creditRequests.length }} results
+    </p>
+    <div class="flex gap-2">
+      <button
+        (click)="changePage(-1)"
+        [disabled]="currentPage === 1"
+        class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <button
+        (click)="changePage(1)"
+        [disabled]="currentPage === totalPages"
+        class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
